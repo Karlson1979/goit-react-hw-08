@@ -1,27 +1,25 @@
 import { useDispatch, useSelector } from "react-redux";
-import { apiDeleteContact } from "../../redux/contactsOps";
+import { apiDeleteContact } from "../../redux/contacts/contactsOps";
 import {
   selectError,
   selectLoading,
-  selectFilteredContacts, 
-} from "../../redux/contactsSlice";
+  selectFilteredContacts,
+} from "../../redux/contacts/contactsSlice";
 import Contact from "../Contact/Contact";
 import Loader from "../Loader";
 
 const ContactList = () => {
-  const filteredContacts = useSelector(selectFilteredContacts); 
+  const filteredContacts = useSelector(selectFilteredContacts);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
   const dispatch = useDispatch();
 
-  
   const handleDeleteContact = (contactId) => {
     dispatch(apiDeleteContact(contactId));
   };
 
   return (
     <div>
-     
       {loading && (
         <div
           style={{
@@ -34,7 +32,6 @@ const ContactList = () => {
         </div>
       )}
 
-      
       {error && (
         <p>
           Oops, some error occurred: &quot;{error}&quot;. Please, try again
@@ -42,7 +39,6 @@ const ContactList = () => {
         </p>
       )}
 
-      
       {!loading && !error && filteredContacts.length > 0
         ? filteredContacts.map((contact) => (
             <Contact
