@@ -1,19 +1,22 @@
-// src/components/ContactList.jsx
-import { useSelector } from "react-redux";
-import { selectFilteredContacts } from "../../redux/contacts/slice"; // Перевірте правильність шляху
+import React from "react";
+import PropTypes from "prop-types";
 
-const ContactList = () => {
-  const filteredContacts = useSelector(selectFilteredContacts);
-
+const ContactList = ({ contacts, onDeleteContact }) => {
   return (
     <ul>
-      {filteredContacts.map((contact) => (
+      {contacts.map((contact) => (
         <li key={contact.id}>
-          {contact.name} - {contact.phone}
+          {contact.name} - {contact.number}
+          <button onClick={() => onDeleteContact(contact.id)}>Удалить</button>
         </li>
       ))}
     </ul>
   );
+};
+
+ContactList.propTypes = {
+  contacts: PropTypes.array.isRequired,
+  onDeleteContact: PropTypes.func.isRequired,
 };
 
 export default ContactList;
