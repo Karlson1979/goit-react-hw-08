@@ -1,14 +1,9 @@
-.contact {
-    border: 1px solid rgb(52, 113, 218);
-    padding: 10px;
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    gap: 15px;
+.text {
+  text-align: left;
 }
-
-.contactBtn {
-    width: 100px;
-    height: 30px;
-
+.button {
+  background-color: #504df1;
+  border: 2px solid #504df1;
+  border-radius: 5px;
+  padding: 10px;
 }

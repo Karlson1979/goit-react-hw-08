@@ -1,45 +1,74 @@
-// src/redux/contacts/slice.js
-
 import { createSlice } from "@reduxjs/toolkit";
+
+import {
+  addContact,
+  deleteContact,
+  fetchContacts,
+  updateContact,
+} from "./operations";
+import { apiLogout } from "../auth/operations";
 
 const initialState = {
   items: [],
-  filter: "",
-  isLoading: false,
+  loading: false,
   error: null,
+  current: null,
 };
-
+const handlePending = (state) => {
+  state.loading = true;
+  state.error = null;
+};
+const handleRejected = (state, action) => {
+  state.loading = false;
+  state.error = action.payload;
+};
 const contactsSlice = createSlice({
   name: "contacts",
-  initialState,
+  initialState: initialState,
   reducers: {
-    setContacts(state, action) {
-      state.items = action.payload;
-    },
-    setFilter(state, action) {
-      state.filter = action.payload;
-    },
-    setError(state, action) {
-      state.error = action.payload;
-    },
-    setLoading(state, action) {
-      state.isLoading = action.payload;
+    setCurrent: (state, action) => {
+      state.current = action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContacts.pending, handlePending)
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchContacts.rejected, handleRejected)
+      .addCase(addContact.pending, handlePending)
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items.push(action.payload);
+      })
+      .addCase(addContact.rejected, handleRejected)
+      .addCase(deleteContact.pending, handlePending)
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = state.items.filter(
+          (item) => item.id !== action.payload.id
+        );
+      })
+      .addCase(deleteContact.rejected, handleRejected)
+      .addCase(updateContact.pending, handlePending)
+      .addCase(updateContact.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        const index = state.items.findIndex(
+          (item) => item.id === action.payload.id
+        );
+        state.items.splice(index, 1, action.payload);
+        state.current = null;
+      })
+      .addCase(updateContact.rejected, handleRejected)
+      .addCase(apiLogout.fulfilled, (state) => {
+        state.items = [];
+        state.error = null;
+        state.loading = false;
+      });
+  },
 });
-
-// Селектор для фільтрованих контактів
-export const selectFilteredContacts = (state) => {
-  const filter = state.contacts.filter.toLowerCase();
-  return state.contacts.items.filter(
-    (contact) =>
-      contact.name.toLowerCase().includes(filter) ||
-      contact.phone.includes(filter)
-  );
-};
-
-// Експортуємо екшени та редуктор
-export const { setContacts, setFilter, setError, setLoading } =
-  contactsSlice.actions;
-
-export default contactsSlice.reducer;
+export const contactsReducer = contactsSlice.reducer;
+export const { setCurrent } = contactsSlice.actions;

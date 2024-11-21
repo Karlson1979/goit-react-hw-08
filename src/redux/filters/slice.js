@@ -1,27 +1,23 @@
-// src/redux/filters/slice.js
-
 import { createSlice } from "@reduxjs/toolkit";
 
-// Define the initial state and slice
-const initialState = {
-  filter: "",
+const initialFilter = {
+  name: "",
+  tel: "",
 };
 
 const filtersSlice = createSlice({
-  name: "filters",
-  initialState,
+  name: "filter",
+  tel: "filter",
+  initialState: initialFilter,
   reducers: {
-    setFilter(state, action) {
-      state.filter = action.payload;
+    setFilterValue: (state, action) => {
+      state.name = action.payload;
+    },
+    setFilterTel: (state, action) => {
+      state.tel = action.payload;
     },
   },
 });
-
-// Export the action
-export const { setFilter } = filtersSlice.actions;
-
-// Export the selector
-export const selectFilter = (state) => state.filters.filter;
-
-// Export the reducer
-export default filtersSlice.reducer;
+export const filterReducer = filtersSlice.reducer;
+export const { setFilterValue } = filtersSlice.actions;
+export const { setFilterTel } = filtersSlice.actions;
