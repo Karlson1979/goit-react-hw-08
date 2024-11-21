@@ -1,56 +1,18 @@
-import { useDispatch, useSelector } from "react-redux";
-import { apiDeleteContact } from "../../redux/contacts/contactsOps";
-import {
-  selectError,
-  selectLoading,
-  selectFilteredContacts,
-} from "../../redux/contacts/contactsSlice";
-import Contact from "../Contact/Contact";
-import Loader from "../Loader";
+// src/components/ContactList.jsx
+import { useSelector } from "react-redux";
+import { selectFilteredContacts } from "../../redux/contacts/slice"; // Перевірте правильність шляху
 
 const ContactList = () => {
   const filteredContacts = useSelector(selectFilteredContacts);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-  const dispatch = useDispatch();
-
-  const handleDeleteContact = (contactId) => {
-    dispatch(apiDeleteContact(contactId));
-  };
 
   return (
-    <div>
-      {loading && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            margin: "20px 0",
-          }}
-        >
-          <Loader />
-        </div>
-      )}
-
-      {error && (
-        <p>
-          Oops, some error occurred: &quot;{error}&quot;. Please, try again
-          later 🤷‍♂️.
-        </p>
-      )}
-
-      {!loading && !error && filteredContacts.length > 0
-        ? filteredContacts.map((contact) => (
-            <Contact
-              key={contact.id}
-              name={contact.name}
-              number={contact.number}
-              id={contact.id}
-              deleteContact={handleDeleteContact}
-            />
-          ))
-        : !loading && !error && <p>Контакты не найдены</p>}
-    </div>
+    <ul>
+      {filteredContacts.map((contact) => (
+        <li key={contact.id}>
+          {contact.name} - {contact.phone}
+        </li>
+      ))}
+    </ul>
   );
 };
 
