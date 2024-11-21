@@ -4,11 +4,11 @@
 }
 .item {
   color: black;
-  border: solid 1px blue;
+  border: solid 1px;
   border-radius: 7px;
   padding: 7px;
 }
 .active {
   color: white;
-  background-color: blue;
+  background-color: cadetblue;
 }
