@@ -11,7 +11,7 @@ const UserMenu = () => {
 
   return (
     <div className={css.list}>
-      <span className={css.text}>{user.name}</span>
+      <span className={css.text}>Hi,{user.name}</span>
       <button onClick={handleLogout} className={css.button}>
         Logout
       </button>
